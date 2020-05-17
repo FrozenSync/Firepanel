@@ -1,0 +1,10 @@
+<mat-sidenav-container class="side-navigation">
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/" routerLinkActive="active">Home</a>
+      <a mat-list-item routerLink="/raspberry-pi" routerLinkActive="active">Raspberry Pis</a>
+      <a mat-list-item routerLink="/tournament" routerLinkActive="active">Tournaments</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <ng-content></ng-content>
+</mat-sidenav-container>
