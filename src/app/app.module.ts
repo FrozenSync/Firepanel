@@ -7,11 +7,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NavigationComponent } from './navigation/navigation.component';
 import { MatListModule } from '@angular/material/list';
+import { RpiComponent } from './rpi/rpi.component';
+import { TournamentComponent } from './tournament/tournament.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavigationComponent
+    NavigationComponent,
+    RpiComponent,
+    TournamentComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
