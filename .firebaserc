@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "firebridge-7ba35": {
+      "hosting": {
+        "Firepanel": [
+          "firebridge-7ba35"
+        ]
+      }
+    }
+  }
+}
