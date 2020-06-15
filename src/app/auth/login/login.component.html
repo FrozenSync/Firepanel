@@ -1,0 +1,6 @@
+<label for="email" class="label">Passwordless Auth</label>
+<input type="email" class="input" id="email" [(ngModel)]="email">
+<button mat-raised-button color="primary" [disabled]="initiatedPasswordlessLogin" (click)="login()">Get Login Link</button>
+
+<div *ngIf="initiatedPasswordlessLogin">Please check your email for a login link!</div>
+<div *ngIf="errorMessage">{{ errorMessage }}</div>
