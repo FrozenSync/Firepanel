@@ -13,11 +13,11 @@ import { HomeComponent } from './home/home.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,6 @@ import { MatInputModule } from '@angular/material/input';
     RpiComponent,
     TournamentComponent,
     HomeComponent,
-    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +38,8 @@ import { MatInputModule } from '@angular/material/input';
     MatListModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    AuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
