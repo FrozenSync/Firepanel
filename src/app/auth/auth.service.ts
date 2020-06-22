@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { User } from 'firebase';
 import { first, map } from 'rxjs/operators';
+import { User } from 'firebase';
 
 
 @Injectable({
@@ -14,7 +15,7 @@ export class AuthService {
 
   principal: Observable<User | null>;
 
-  constructor(private fireAuth: AngularFireAuth) {
+  constructor(private fireAuth: AngularFireAuth, private router: Router) {
     this.principal = fireAuth.authState;
   }
 
@@ -65,5 +66,6 @@ export class AuthService {
 
   async logout(): Promise<void> {
     await this.fireAuth.signOut();
+    this.router.navigate(['login']).catch(err => console.error(err));
   }
 }
