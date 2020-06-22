@@ -10,7 +10,7 @@ export const environment = {
     appId: '1:494567369272:web:cf93d3b00d0f383da354cd'
   },
   actionCodeSettings: {
-    url: 'https://firebridge-7ba35.web.app/login',
+    url: 'https://firebridge-7ba35.web.app/',
     handleCodeInApp: true
   }
 };
