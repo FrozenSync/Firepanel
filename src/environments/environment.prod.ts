@@ -12,5 +12,6 @@ export const environment = {
   actionCodeSettings: {
     url: 'https://firebridge-7ba35.web.app/',
     handleCodeInApp: true
-  }
+  },
+  consulUrl: '_'
 };
