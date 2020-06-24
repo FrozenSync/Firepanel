@@ -16,7 +16,8 @@ export const environment = {
   actionCodeSettings: {
     url: 'http://localhost:4200/',
     handleCodeInApp: true
-  }
+  },
+  consulUrl: 'http://127.0.0.1:8500/v1'
 };
 
 /*
