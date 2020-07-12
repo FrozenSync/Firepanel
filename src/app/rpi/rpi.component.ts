@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
 
 import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
+import { AuthService } from '../auth/auth.service';
+import { RaspberryPi, RaspberryPiService } from './raspberry-pi.service';
 import { HealthCheckService } from './healthcheck/health-check.service';
 import { ConsulService } from './healthcheck/consul-node';
-import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-rpi',
@@ -20,16 +20,18 @@ export class RpiComponent implements OnInit {
   id: string;
   name: string;
 
-  pis: Observable<any[]>;
+  pis: Observable<RaspberryPi[]>;
 
   services: Observable<ConsulService[]>;
   consulError: string | null = null;
 
-  constructor(private auth: AngularFireAuth, private firestore: AngularFirestore, private healthService: HealthCheckService) {
-    this.auth.user.subscribe(user => {
-      this.userId = user.uid;
-      this.pis = firestore.collection('raspberryPis', ref => ref.where('ownerId', '==', this.userId)).valueChanges();
-    });
+  constructor(private authService: AuthService,
+              private raspberryPiService: RaspberryPiService,
+              private healthService: HealthCheckService) {}
+
+  ngOnInit(): void {
+    this.authService.principal.subscribe(user => this.userId = user.uid);
+    this.pis = this.raspberryPiService.findAllByOwner();
 
     this.services = this.healthService.getHealth('pop-os').pipe(
       catchError(err => {
@@ -39,15 +41,12 @@ export class RpiComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-  }
-
   onSubmit() {
-    console.log(this.id);
-    const doc = this.firestore.collection('raspberryPis').doc(this.id);
-    doc.update({
+    const result: RaspberryPi = {
+      id: this.id,
       ownerId: this.userId,
       name: this.name
-    }).catch(err => console.log(err));
+    };
+    this.raspberryPiService.save(result);
   }
 }
