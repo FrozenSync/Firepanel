@@ -13,15 +13,15 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Promise<boolean | UrlTree> {
     const url = state.url;
-    const result = await this.authService.authenticate(url);
+    const result = await this.authService.completePasswordlessAuthentication(url);
 
-    if (result === true) {
-      return true;
-    } else if (result === false) {
-      this.authService.setRedirectUrl(url);
-      return this.router.createUrlTree(['/login']);
-    } else {
-      return this.router.createUrlTree([result]);
+    switch (result.kind) {
+      case 'alreadyAuthenticated': return true;
+      case 'success': return this.router.createUrlTree([result]);
+      case 'fail': {
+        this.authService.setRedirectUrl(url);
+        return this.router.createUrlTree(['/login']);
+      }
     }
   }
 }
