@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   login(): void {
-    this.authService.initiateLoginByPasswordless(this.email)
+    this.authService.initiatePasswordlessAuthentication(this.email)
       .then(_ => {
         this.initiatedPasswordlessLogin = true;
         this.errorMessage = null;

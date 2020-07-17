@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { User } from 'firebase';
+
+import { Observable } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
-import { User } from 'firebase';
+import { AuthResult } from './auth-result';
 
 
 @Injectable({
@@ -15,8 +17,8 @@ export class AuthService {
 
   principal: Observable<User | null>;
 
-  constructor(private fireAuth: AngularFireAuth, private router: Router) {
-    this.principal = fireAuth.authState;
+  constructor(private ngFireAuth: AngularFireAuth, private router: Router) {
+    this.principal = ngFireAuth.user;
   }
 
   private static getAndRemoveEmail(): string {
@@ -39,33 +41,31 @@ export class AuthService {
     localStorage.setItem('redirectUrl', redirectUrl);
   }
 
-  async authenticate(url: string): Promise<boolean | string> {
-    const isLoggedIn = await this.principal
-      .pipe(first())
-      .pipe(map(principal => principal !== null))
-      .toPromise();
-    if (isLoggedIn === true) { return true; }
-
-    const loginResult = await this.completeLoginByPasswordless(url);
-    return loginResult === null ? false : loginResult;
-  }
-
-  async initiateLoginByPasswordless(email: string): Promise<void> {
-    await this.fireAuth.sendSignInLinkToEmail(email, environment.actionCodeSettings);
+  async initiatePasswordlessAuthentication(email: string): Promise<void> {
+    await this.ngFireAuth.sendSignInLinkToEmail(email, environment.actionCodeSettings);
     AuthService.setEmail(email);
   }
 
-  async completeLoginByPasswordless(url: string): Promise<string | null> {
-    if (!await this.fireAuth.isSignInWithEmailLink(url)) { return null; }
+  async completePasswordlessAuthentication(url: string): Promise<AuthResult> {
+    if (await this.isAuthenticated()) { return { kind: 'alreadyAuthenticated' }; }
+    if (!await this.ngFireAuth.isSignInWithEmailLink(url)) { return { kind: 'fail' }; }
 
     const email = AuthService.getAndRemoveEmail();
-    await this.fireAuth.signInWithEmailLink(email, url);
+    await this.ngFireAuth.signInWithEmailLink(email, url);
 
-    return AuthService.getAndRemoveRedirectUrl();
+    const redirectionUrl = AuthService.getAndRemoveRedirectUrl();
+    return { kind: 'success', redirectionUrl };
+  }
+
+  private isAuthenticated(): Promise<boolean> {
+    return this.principal.pipe(
+      take(1),
+      map(it => it !== null),
+    ).toPromise();
   }
 
   async logout(): Promise<void> {
-    await this.fireAuth.signOut();
+    await this.ngFireAuth.signOut();
     this.router.navigate(['login']).catch(err => console.error(err));
   }
 }
