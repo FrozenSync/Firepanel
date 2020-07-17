@@ -18,7 +18,7 @@ export class AuthService {
   principal: Observable<User | null>;
 
   constructor(private ngFireAuth: AngularFireAuth, private router: Router) {
-    this.principal = ngFireAuth.authState;
+    this.principal = ngFireAuth.user;
   }
 
   private static getAndRemoveEmail(): string {
