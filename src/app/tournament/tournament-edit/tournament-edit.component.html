@@ -1,0 +1,54 @@
+<form [formGroup]="tournamentForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="shipping-card">
+    <mat-card-header>
+      <mat-card-title>Tournament information</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Pick a name</mat-label>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="tournamentForm.controls['name'].hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="tournamentForm.controls['date'].hasError('required')">
+              Date is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-checkbox [checked]="allChecked"
+                        [indeterminate]="someChecked()"
+                        (change)="setAll($event.checked)">
+            All
+          </mat-checkbox>
+          <ul formArrayName="raspberryPis">
+            <li *ngFor="let raspberryPiControl of this.raspberryPis.controls; let i=index">
+              <ng-container [formGroupName]="i">
+                <mat-checkbox formControlName="checked"
+                              (change)="updateAllChecked()">
+                  {{ raspberryPiControl.value.name }}
+                </mat-checkbox>
+              </ng-container>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button [mat-dialog-close]>Cancel</button>
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
