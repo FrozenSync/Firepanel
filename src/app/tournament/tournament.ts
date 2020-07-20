@@ -10,4 +10,10 @@ export interface TournamentData {
   ownerId: string;
   name: string;
   date: Timestamp;
+  assignedRaspberryPis: [{
+    id: string;
+    role: Role;
+  }];
 }
+
+export type Role = 'master' | 'slave';
