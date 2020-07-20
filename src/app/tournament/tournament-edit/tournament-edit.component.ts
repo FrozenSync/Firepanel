@@ -6,7 +6,7 @@ import { firestore } from 'firebase';
 import Timestamp = firestore.Timestamp;
 
 import { Tournament } from '../tournament';
-import { RaspberryPiService } from '../../rpi/raspberry-pi.service';
+import { RaspberryPiService } from '../../raspberry-pi/raspberry-pi.service';
 import { TournamentService } from '../tournament.service';
 
 
@@ -42,7 +42,7 @@ export class TournamentEditComponent implements OnInit {
 
     this.raspberryPiService.findAllByOwner().subscribe(raspberryPis =>
       raspberryPis.forEach(it => {
-        const formGroup = this.fb.group({ id: it.id, name: it.name, checked: false });
+        const formGroup = this.fb.group({ id: it.id, name: it.data.name, checked: false });
         this.raspberryPis.push(formGroup);
       })
     );
