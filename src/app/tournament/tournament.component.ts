@@ -38,7 +38,7 @@ export class TournamentComponent implements AfterViewInit, OnInit {
   }
 
   openCreateDialog(): void {
-    this.dialog.open(TournamentEditComponent, { width: '500px' });
+    this.dialog.open(TournamentEditComponent, { width: '80%' });
   }
 
   openEditDialog(): void {

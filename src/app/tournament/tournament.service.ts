@@ -34,18 +34,13 @@ export class TournamentService {
     );
   }
 
-  create(tournamentData: { name: string, date: Date; }): Promise<DocumentReference> {
+  create(tournamentData: TournamentData): Promise<DocumentReference> {
     return this.authService.principal
       .pipe(take(1))
       .toPromise()
       .then(principal => {
-        const data = {
-          ownerId: principal.uid,
-          name: tournamentData.name,
-          date: tournamentData.date
-        };
-
-        return this.ngFirestore.collection('tournaments').add(data);
+        tournamentData.ownerId = principal.uid;
+        return this.ngFirestore.collection('tournaments').add(tournamentData);
       });
   }
 

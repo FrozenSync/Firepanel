@@ -16,11 +16,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { TournamentComponent } from './tournament.component';
 import { TournamentEditComponent } from './tournament-edit/tournament-edit.component';
 import { TournamentRoutingModule } from './tournament-routing.module';
-
 
 
 @NgModule({
@@ -31,6 +31,7 @@ import { TournamentRoutingModule } from './tournament-routing.module';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TournamentRoutingModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -45,7 +46,7 @@ import { TournamentRoutingModule } from './tournament-routing.module';
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    TournamentRoutingModule
+    MatStepperModule
   ]
 })
 export class TournamentModule {}
