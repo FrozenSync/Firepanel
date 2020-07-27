@@ -1,8 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -13,8 +10,6 @@ import { RaspberryPi } from './raspberry-pi';
 import { RaspberryPiService } from './raspberry-pi.service';
 import { RaspberryPiDataSource } from './raspberry-pi-datasource';
 import { RaspberryPiEditComponent } from './raspberry-pi-edit/raspberry-pi-edit.component';
-import { HealthCheckService } from './healthcheck/health-check.service';
-import { ConsulService } from './healthcheck/consul-node';
 import { RegistrationComponent } from './registration/registration.component';
 
 @Component({
@@ -31,22 +26,13 @@ export class RaspberryPiComponent implements AfterViewInit, OnInit {
   displayedColumns = ['select', 'name', 'id'];
   selection = new SelectionModel<RaspberryPi>(true, []);
 
-  services: Observable<ConsulService[]>;
-  consulError: string | null = null;
-
-  constructor(public dialog: MatDialog,
-              private raspberryPiService: RaspberryPiService,
-              private healthService: HealthCheckService) {}
+  constructor(
+    public dialog: MatDialog,
+    private raspberryPiService: RaspberryPiService
+  ) {}
 
   ngOnInit(): void {
     this.dataSource = new RaspberryPiDataSource(this.raspberryPiService);
-
-    this.services = this.healthService.getHealth('pop-os').pipe(
-      catchError(err => {
-        this.consulError = 'The health check service seems to be down.';
-        return throwError(err);
-      })
-    );
   }
 
   ngAfterViewInit() {

@@ -56,14 +56,10 @@
 
 <section class="health-check">
   <h1>Health</h1>
-
-  <div [ngSwitch]="consulError">
-    <ul *ngSwitchCase="null">
-      <li class="text" *ngFor="let service of services | async">
-        name: {{service.ServiceName}}<br/>
-        status: {{service.Status}}
-      </li>
-    </ul>
-    <span *ngSwitchDefault>{{ consulError }}</span>
-  </div>
+  <ul>
+    <li class="text" *ngFor="let pi of dataSource.data">
+      name: {{pi.data.name}}<br/>
+      ping: {{pi.data.healthCheck?.latestPing.toDate().toLocaleString() || 'none'}}
+    </li>
+  </ul>
 </section>
