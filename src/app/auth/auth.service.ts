@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from 'firebase';
-
-import { Observable } from 'rxjs';
-import { take, map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { AuthResult } from './auth-result';
@@ -15,10 +13,10 @@ import { AuthResult } from './auth-result';
 })
 export class AuthService {
 
-  principal: Observable<User | null>;
+  principal: User | null;
 
   constructor(private ngFireAuth: AngularFireAuth, private router: Router) {
-    this.principal = ngFireAuth.user;
+    ngFireAuth.user.subscribe(user => this.principal = user);
   }
 
   private static getAndRemoveEmail(): string {
@@ -58,7 +56,7 @@ export class AuthService {
   }
 
   private isAuthenticated(): Promise<boolean> {
-    return this.principal.pipe(
+    return this.ngFireAuth.user.pipe(
       take(1),
       map(it => it !== null),
     ).toPromise();

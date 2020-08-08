@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 
 import { Observable } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { AuthService } from '../auth/auth.service';
 import { Tournament, TournamentData } from './tournament';
@@ -15,33 +15,25 @@ export class TournamentService {
   constructor(private authService: AuthService, private ngFirestore: AngularFirestore) { }
 
   findAllByOwner(): Observable<Tournament[]> {
-    return this.authService.principal.pipe(
-      switchMap(principal => {
-        const query = ref => ref.where('ownerId', '==', principal.uid);
-        const resultSet = this.ngFirestore.collection<TournamentData>('tournaments', query);
+    const ownerId = this.authService.principal.uid;
+    const query = ref => ref.where('ownerId', '==', ownerId);
+    const resultSet = this.ngFirestore.collection<TournamentData>('tournaments', query);
 
-        return resultSet.snapshotChanges().pipe(
-          map(changes =>
-            changes.map(change => {
-              const id = change.payload.doc.id;
-              const data = change.payload.doc.data();
+    return resultSet.snapshotChanges().pipe(
+      map(changes =>
+        changes.map(change => {
+          const id = change.payload.doc.id;
+          const data = change.payload.doc.data();
 
-              return { id, data };
-            })
-          )
-        );
-      })
+          return { id, data };
+        })
+      )
     );
   }
 
   create(tournamentData: TournamentData): Promise<DocumentReference> {
-    return this.authService.principal
-      .pipe(take(1))
-      .toPromise()
-      .then(principal => {
-        tournamentData.ownerId = principal.uid;
-        return this.ngFirestore.collection('tournaments').add(tournamentData);
-      });
+    tournamentData.ownerId = this.authService.principal.uid;
+    return this.ngFirestore.collection('tournaments').add(tournamentData);
   }
 
   update(tournament: Tournament): Promise<void> {
