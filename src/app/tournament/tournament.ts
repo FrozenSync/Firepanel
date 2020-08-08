@@ -7,7 +7,6 @@ export interface Tournament {
 }
 
 export interface TournamentData {
-  ownerId: string;
   name: string;
   date: Timestamp;
   assignedRaspberryPis: [{
