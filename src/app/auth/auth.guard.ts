@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
 
     switch (result.kind) {
       case 'alreadyAuthenticated': return true;
-      case 'success': return this.router.createUrlTree([result]);
+      case 'success': return this.router.createUrlTree([result.redirectionUrl]);
       case 'fail': {
         this.authService.setRedirectUrl(url);
         return this.router.createUrlTree(['/login']);
