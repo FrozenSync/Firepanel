@@ -3,11 +3,11 @@ import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/fo
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { firestore } from 'firebase';
-import Timestamp = firestore.Timestamp;
 
 import { Tournament, TournamentData } from '../tournament';
 import { RaspberryPiService } from '../../raspberry-pi/raspberry-pi.service';
 import { TournamentService } from '../tournament.service';
+import Timestamp = firestore.Timestamp;
 
 
 @Component({
@@ -110,7 +110,6 @@ export class TournamentEditComponent implements OnInit {
       this.tournamentService.update(result).catch(err => console.error(err));
     } else {
       const result: TournamentData = {
-        ownerId: '',
         name: this.firstStepGroup.value.name,
         date: this.firstStepGroup.value.date,
         assignedRaspberryPis: [{ id: masterPiId, role: 'master' }]
